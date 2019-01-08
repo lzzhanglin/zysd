@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zysd.test.mapper.FileMapper">
+<insert id="insertData" parameterType="java.util.List">
+    insert into test()
+    values
+
+  <foreach collection="list" item="item" index="index" separator="," >
+    (null,
+    #{item.a1},
+    #{item.a2},
+    #{item.a3},
+    #{item.a4},
+    #{item.a5},
+    #{item.a6},
+    #{item.a7},
+    #{item.a8},
+    #{item.a9},
+    #{item.a10},
+    #{item.a11},
+    #{item.a12},
+    #{item.quality}
+    )
+  </foreach>
+
+</insert>
+
+  <select id="showData" parameterType="int" resultType="com.zysd.test.entity.TestData">
+    select a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11,a12,quality
+    from
+    test
+    limit #{limit}, #{offset}
+
+  </select>
+
+</mapper>
+        <!--(null ,-->
+        <!--#{,jdbcType=DECIMAL},-->
+        <!--#{a2,jdbcType=DECIMAL},-->
+        <!--#{a3,jdbcType=DECIMAL},-->
+        <!--#{a4,jdbcType=DECIMAL},-->
+        <!--#{a5,jdbcType=DECIMAL},-->
+        <!--#{a6,jdbcType=DECIMAL},-->
+        <!--#{a7,jdbcType=DECIMAL},-->
+        <!--#{a8,jdbcType=DECIMAL},-->
+        <!--#{a9,jdbcType=DECIMAL},-->
+        <!--#{a10,jdbcType=DECIMAL},-->
+        <!--#{a11,jdbcType=DECIMAL},-->
+        <!--#{a12,jdbcType=DECIMAL},-->
+        <!--#{quality,jdbcType=VARCHAR})-->

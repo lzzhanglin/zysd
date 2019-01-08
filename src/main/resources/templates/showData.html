@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="/webjars/jquery/3.1.1/jquery.min.js"></script>
+
+    <link rel="stylesheet" href="/webjars/bootstrap/3.3.7-1/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="../static/css/showData.css" />
+</head>
+<body>
+
+<table class="table table-striped" id="dataTable" >
+    <tr>
+        <th>a1</th>
+        <th>a2</th>
+        <th>a3</th>
+        <th>a4</th>
+        <th>a5</th>
+        <th>a6</th>
+        <th>a7</th>
+        <th>a8</th>
+        <th>a9</th>
+        <th>a10</th>
+        <th>a11</th>
+        <th>a12</th>
+        <th>quality</th>
+    </tr>
+
+    <tr th:each="data : ${dataList}">
+
+
+
+        <td th:text="${data.a1}"  id="a1">
+
+        </td>
+
+        <td th:text="${data.a2}"  id="a2">
+
+        </td>
+
+        <td th:text="${data.a3}"  id="a3">
+
+        </td>
+
+        <td th:text="${data.a4}"  id="a4">
+
+        </td>
+        <td th:text="${data.a5}"  id="a5">
+
+        </td>
+        <td th:text="${data.a6}"  id="a6">
+
+        </td>
+        <td th:text="${data.a7}"  id="a7">
+
+        </td>
+        <td th:text="${data.a8}"  id="a8">
+
+        </td>
+        <td th:text="${data.a9}"  id="a9">
+
+        </td>
+        <td th:text="${data.a10}"  id="a10">
+
+        </td>
+        <td th:text="${data.a11}"  id="a11">
+
+        </td>
+        <td th:text="${data.a12}"  id="a12">
+
+        </td>
+        <td th:text="${data.quality}"  id="quality">
+
+        </td>
+
+
+    </tr>
+</table>
+
+</body>
+</html>
