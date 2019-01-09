@@ -35,6 +35,10 @@
 
   </select>
 
+  <select id="getTotal" resultType="int">
+    select count(a1) from test;
+  </select>
+
 </mapper>
         <!--(null ,-->
         <!--#{,jdbcType=DECIMAL},-->

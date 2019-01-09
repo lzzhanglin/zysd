@@ -16,4 +16,6 @@ public interface FileMapper {
     void insertData(List<TestData> list);
 
     List<TestData> showData(Integer limit, Integer offset);
+
+    Integer getTotal();
 }
