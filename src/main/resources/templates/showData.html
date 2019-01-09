@@ -10,6 +10,8 @@
 </head>
 <body>
 
+
+
 <table class="table table-striped" id="dataTable" >
     <tr>
         <th>a1</th>
@@ -73,6 +75,27 @@
         <td th:text="${data.quality}"  id="quality">
 
         </td>
+
+
+    </tr>
+</table>
+
+<table class="table table-striped" id="dataAnalysisTable" >
+    <tr>
+
+    </tr>
+
+    <tr th:each="data : ${analysisList}">
+
+
+
+        <td th:each="entry : ${data}" th:text="${entry.key}" id="a1a">
+        </td>
+        <td th:each="entry : ${data}" th:text="${entry.value}" id="a1av">
+
+        </td>
+
+
 
 
     </tr>

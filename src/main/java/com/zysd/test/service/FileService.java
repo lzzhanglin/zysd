@@ -5,6 +5,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author lzzhanglin
@@ -15,4 +16,6 @@ public interface FileService {
     boolean batchImport(String fileName, MultipartFile file, HttpServletRequest request) throws Exception;
 
     public List<TestData> showData(Integer limit, Integer offset);
+
+    List<Map<String, Object>> dataAnalysis(List<TestData> dataList);
 }

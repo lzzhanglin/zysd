@@ -13,7 +13,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.*;
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 import static javax.print.attribute.standard.ReferenceUriSchemesSupported.HTTP;
@@ -112,10 +115,16 @@ public class MainController {
         if (pageNo == 1) {
             List<TestData> dataList = fileService.showData(0, 10);
             request.setAttribute("dataList",dataList);
+            List<Map<String, Object>> analysisList = fileService.dataAnalysis(dataList);
+            request.setAttribute("analysisList",analysisList);
+
 
         } else {
             List<TestData> dataList = fileService.showData((pageNo-1)*pageSize, pageSize);
             request.setAttribute("dataList",dataList);
+            List<Map<String, Object>> analysisList = fileService.dataAnalysis(dataList);
+            request.setAttribute("analysisList",analysisList);
+
 
         }
 
