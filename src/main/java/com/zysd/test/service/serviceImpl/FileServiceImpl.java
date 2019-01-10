@@ -2,6 +2,7 @@ package com.zysd.test.service.serviceImpl;
 
 import com.csvreader.CsvReader;
 import com.zysd.test.entity.TestData;
+import com.zysd.test.entity.UploadFile;
 import com.zysd.test.mapper.FileMapper;
 import com.zysd.test.service.FileService;
 import org.apache.catalina.User;
@@ -14,6 +15,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
@@ -259,6 +261,41 @@ public class FileServiceImpl implements FileService {
         return fileMapper.getDataById(dataId);
     }
 
+
+
+    @Override
+    public  Integer uploadFile(String fileName) {
+
+        UploadFile file = new UploadFile();
+        file.setFileName(fileName);
+        Integer resultRow = fileMapper.uploadFile(file);
+        return resultRow;
+
+    }
+
+    //根据随机字符串生成文件名
+    public static String getRandomFileName(String fileName, int length){
+        String str="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        Random random=new Random();
+        StringBuffer sb=new StringBuffer();
+        for(int i=0;i<length;i++){
+            int number=random.nextInt(62);
+            sb.append(str.charAt(number));
+        }
+        String randomStr = sb.toString();
+        StringBuilder sb1 = new StringBuilder();
+        int index = fileName.lastIndexOf(".");
+
+        String prefix = fileName.substring(0, index);
+        String suffix = fileName.substring(index+1, fileName.length());
+        sb1.append(prefix);
+        sb1.append("-");
+        sb1.append(randomStr);
+        sb1.append(".");
+        sb1.append(suffix);
+
+        return sb1.toString();
+    }
 
     public static String getFactor(List<TestData> dataList) {
 

@@ -22,4 +22,7 @@ public interface FileService {
     List<TestData> getDataForEdit(Integer limit, Integer offset);
 
     public TestData getDataById(Long dataId);
+
+    Integer uploadFile(String fileName);
+
 }

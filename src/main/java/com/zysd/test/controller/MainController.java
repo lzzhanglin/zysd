@@ -1,20 +1,21 @@
 package com.zysd.test.controller;
 
-import com.zysd.test.entity.QueryParams;
-import com.zysd.test.entity.Resp;
-import com.zysd.test.entity.ReturnPage;
-import com.zysd.test.entity.TestData;
+import com.zysd.test.entity.*;
 import com.zysd.test.mapper.FileMapper;
 import com.zysd.test.service.FileService;
+import com.zysd.test.service.serviceImpl.FileServiceImpl;
+import org.apache.catalina.connector.ClientAbortException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.util.ResourceUtils;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -31,6 +32,8 @@ import static javax.print.attribute.standard.ReferenceUriSchemesSupported.HTTP;
 
 @Controller
 public class MainController {
+
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
 
 
     @Autowired
@@ -51,13 +54,16 @@ public class MainController {
 
             String fileName = file.getOriginalFilename();
             try {
+                String fileNewName = FileServiceImpl.getRandomFileName(fileName, 10);
                 BufferedOutputStream out = new BufferedOutputStream(
-                        new FileOutputStream(new File(file.getOriginalFilename())));
+                        new FileOutputStream(new File(fileNewName)));
                 out.write(file.getBytes());
                 out.flush();
                 out.close();
 
                 fileService.batchImport(fileName, file, request);
+                //向数据库写入一条导入文件记录
+                fileService.uploadFile(fileNewName);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -135,6 +141,14 @@ public class MainController {
         return "showData";
     }
 
+    @RequestMapping("/allFile")
+    public String getAllFile(HttpServletRequest request) {
+        List<UploadFile> uploadFileList = new ArrayList<>();
+        uploadFileList = fileMapper.getAllFile();
+        request.setAttribute("allFileList", uploadFileList);
+        return "allFile";
+    }
+
 
     @RequestMapping("/editData")
     public String editData(HttpServletRequest request) {
@@ -199,5 +213,138 @@ public class MainController {
 
     }
 
+    @RequestMapping("/download")
+    public void getDownload( HttpServletRequest request, HttpServletResponse response,
+                             @RequestHeader(required = false) String
+            range) throws FileNotFoundException {
+        // Get your file stream from wherever.
+        String downloadFileName = request.getParameter("fileName");
+        String fullPath = ResourceUtils.getURL("classpath:").getPath();
+        int lenOfPath = fullPath.length();
+        fullPath = fullPath.substring(0, lenOfPath - 15);
+        fullPath = fullPath + downloadFileName;
 
-}
+        logger.info("下载路径:" + fullPath);
+
+
+        //**********************************
+
+            //文件目录
+            File music = new File(fullPath);
+
+
+            //开始下载位置
+            long startByte = 0;
+            //结束下载位置
+            long endByte = music.length() - 1;
+        if (endByte == -1) {
+            throw new IllegalArgumentException("文件为空");
+        }
+
+            //有range的话
+            if (range != null && range.contains("bytes=") && range.contains("-")) {
+                range = range.substring(range.lastIndexOf("=") + 1).trim();
+                String ranges[] = range.split("-");
+                try {
+                    //判断range的类型
+                    if (ranges.length == 1) {
+                        //类型一：bytes=-2343
+                        if (range.startsWith("-")) {
+                            endByte = Long.parseLong(ranges[0]);
+                        }
+                        //类型二：bytes=2343-
+                        else if (range.endsWith("-")) {
+                            startByte = Long.parseLong(ranges[0]);
+                        }
+                    }
+                    //类型三：bytes=22-2343
+                    else if (ranges.length == 2) {
+                        startByte = Long.parseLong(ranges[0]);
+                        endByte = Long.parseLong(ranges[1]);
+                    }
+
+                } catch (NumberFormatException e) {
+                    startByte = 0;
+                    endByte = music.length() - 1;
+                }
+            }
+
+            //要下载的长度（为啥要加一问小学数学老师去）
+            long contentLength = endByte - startByte + 1;
+            //文件名
+            String fileName = music.getName();
+            //文件类型
+            String contentType = request.getServletContext().getMimeType(fileName);
+
+
+            //各种响应头设置
+            //参考资料：https://www.ibm.com/developerworks/cn/java/joy-down/index.html
+            //坑爹地方一：看代码
+            response.setHeader("Accept-Ranges", "bytes");
+            //坑爹地方二：http状态码要为206
+            response.setStatus(response.SC_PARTIAL_CONTENT);
+            response.setContentType(contentType);
+            response.setHeader("Content-Type", contentType);
+            //这里文件名换你想要的，inline表示浏览器直接实用（我方便测试用的）
+            //参考资料：http://hw1287789687.iteye.com/blog/2188500
+            response.setHeader("Content-Disposition", "inline;filename=test.mp3");
+            response.setHeader("Content-Length", String.valueOf(contentLength));
+            //坑爹地方三：Content-Range，格式为
+            // [要下载的开始位置]-[结束位置]/[文件总大小]
+            response.setHeader("Content-Range", "bytes " + startByte + "-" + endByte + "/" + music.length());
+
+
+            BufferedOutputStream outputStream = null;
+            RandomAccessFile randomAccessFile = null;
+            //已传送数据大小
+            long transmitted = 0;
+            try {
+                randomAccessFile = new RandomAccessFile(music, "r");
+                outputStream = new BufferedOutputStream(response.getOutputStream());
+                byte[] buff = new byte[4096];
+                int len = 0;
+                randomAccessFile.seek(startByte);
+                //坑爹地方四：判断是否到了最后不足4096（buff的length）个byte这个逻辑（(transmitted + len) <= contentLength）要放前面！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！
+                //不然会会先读取randomAccessFile，造成后面读取位置出错，找了一天才发现问题所在
+                while ((transmitted + len) <= contentLength && (len = randomAccessFile.read(buff)) != -1) {
+                    outputStream.write(buff, 0, len);
+                    transmitted += len;
+                    //停一下，方便测试，用的时候删了就行了
+                    Thread.sleep(10);
+                }
+                //处理不足buff.length部分
+                if (transmitted < contentLength) {
+                    len = randomAccessFile.read(buff, 0, (int) (contentLength - transmitted));
+                    outputStream.write(buff, 0, len);
+                    transmitted += len;
+                }
+
+                outputStream.flush();
+                response.flushBuffer();
+                randomAccessFile.close();
+                System.out.println("下载完毕：" + startByte + "--->" + endByte + "：" + transmitted);
+
+            } catch (ClientAbortException e) {
+                System.out.println("用户停止下载：" + startByte + "--->" + endByte + "：" + transmitted);
+                //捕获此异常表示拥护停止下载
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } finally {
+                try {
+                    if (randomAccessFile != null) {
+                        randomAccessFile.close();
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+        }
+    }
+
+
+
+
+

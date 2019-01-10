@@ -83,6 +83,21 @@
     </where>
   </update>
 
+    <insert id="uploadFile" parameterType="com.zysd.test.entity.UploadFile">
+        insert into file(file_name,upload_time)
+        values(
+        #{fileName,jdbcType=VARCHAR},
+        now()
+        )
+
+    </insert>
+    <select id="getAllFile" resultType="com.zysd.test.entity.UploadFile">
+        select file_name fileName,
+        upload_time uploadTime
+        from file
+    </select>
+
+
 </mapper>
         <!--(null ,-->
         <!--#{,jdbcType=DECIMAL},-->

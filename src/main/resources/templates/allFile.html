@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="/webjars/jquery/3.1.1/jquery.min.js"></script>
+
+    <link rel="stylesheet" href="/webjars/bootstrap/3.3.7-1/css/bootstrap.min.css" />
+</head>
+<body>
+<a href="/showData">
+
+    <button type="button"  class="btn btn-info" id="showDataBtn" style="margin-left: 30px;margin-top: 50px;">
+        查看数据分析
+    </button>
+</a>
+<a href="/editData">
+
+    <button type="button"  class="btn btn-info" id="editDataBtn" style="margin-left: 30px;margin-top: 50px;">
+        编辑数据
+    </button>
+</a>
+<a href="/main">
+
+    <button type="button"  class="btn btn-info" id="allFileBtn" style="margin-left: 30px;margin-top: 50px;">
+        回到首页
+    </button>
+</a>
+<table class="table table-striped" id="fileTable" style="margin-top: 50px;margin-left: 100px;" >
+    <tr>
+        <th>fileName</th>
+        <th>uploadTime</th>
+
+    </tr>
+
+    <tr th:each="file : ${allFileList}">
+
+
+
+        <td th:value="${file.fileName}"  id="fileName">
+            <a th:href="@{/download(fileName=${file.fileName})}" th:download="${file.fileName}">
+                <p th:text="${file.fileName}" ></p>
+            </a>
+        </td>
+
+        <td th:text="${file.uploadTime}"  id="uploadTime">
+
+        </td>
+
+
+
+
+    </tr>
+</table>
+</body>
+</html>
