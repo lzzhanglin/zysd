@@ -28,7 +28,7 @@
 </insert>
 
   <select id="showData" parameterType="int" resultType="com.zysd.test.entity.TestData">
-    select a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11,a12,quality
+    select id dataId,a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11,a12,quality
     from
     test
     limit #{limit}, #{offset}
@@ -38,6 +38,51 @@
   <select id="getTotal" resultType="int">
     select count(a1) from test;
   </select>
+  <select id="getDataById" parameterType="long" resultType="com.zysd.test.entity.TestData">
+    select id dataId,a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11,a12,quality
+    from test
+    <where>
+
+    <if test="dataId != null and dataId !=''" >
+      and id = #{dataId}
+    </if>
+    </where>
+
+  </select>
+  <delete id="deleteDataById" parameterType="long">
+    delete from test
+    <where>
+
+      <if test="dataId != null and dataId !=''" >
+        and id = #{dataId}
+      </if>
+    </where>
+  </delete>
+
+  <update id="updateDataById" parameterType="com.zysd.test.entity.TestData">
+    update test
+    set
+     a1 = #{a1},
+     a2 = #{a2},
+     a3 = #{a3},
+     a4 = #{a4},
+     a5 = #{a5},
+     a6 = #{a6},
+     a7 = #{a7},
+     a8 = #{a8},
+     a9 = #{a9},
+     a10 = #{a10},
+     a1 = #{a11},
+     a11 = #{a1},
+     a12 = #{a12},
+     quality = #{quality}
+    <where>
+
+      <if test="dataId != null and dataId !=''" >
+        and id = #{dataId}
+      </if>
+    </where>
+  </update>
 
 </mapper>
         <!--(null ,-->

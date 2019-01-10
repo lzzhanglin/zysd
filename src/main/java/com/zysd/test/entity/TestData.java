@@ -9,6 +9,8 @@ import java.math.BigDecimal;
  */
 public class TestData {
 
+    private Long dataId;
+
     private BigDecimal a1;
 
     private BigDecimal a2;
@@ -34,6 +36,14 @@ public class TestData {
     private BigDecimal a12;
 
     private String quality;
+
+    public Long getDataId() {
+        return dataId;
+    }
+
+    public void setDataId(Long dataId) {
+        this.dataId = dataId;
+    }
 
     public BigDecimal getA1() {
         return a1;

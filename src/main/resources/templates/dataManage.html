@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="/webjars/jquery/3.1.1/jquery.min.js"></script>
+
+    <link rel="stylesheet" href="/webjars/bootstrap/3.3.7-1/css/bootstrap.min.css" />
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="../static/js/bootstrap-table.js"></script>
+    <script type="text/javascript" src="../static/js/bootstrap-table-zh-CN.js"></script>
+
+    <link rel="stylesheet" href="../static/css/bootstrap-table.css">
+    <!--<link rel="stylesheet" href="../static/css/articleManage.css">-->
+    <script type="text/javascript" src="https://cdn.bootcss.com/limonte-sweetalert2/7.28.11/sweetalert2.all.js"></script>
+    <link rel="stylesheet" href="https://cdn.bootcss.com/limonte-sweetalert2/7.28.11/sweetalert2.css">
+</head>
+<body>
+<a href="/main">
+    <button type="button"  class="btn btn-info" id="toMainBtn" style="margin-left: 30px; margin-top: 30px;">
+        回到首页
+    </button>
+</a>
+<a href="/showData">
+    <button type="button"  class="btn btn-info" id="showDataBtn" style="margin-left: 30px; margin-top: 30px;">
+        查看数据分析
+    </button>
+</a>
+<table id="editDataTable"
+       data-toolbar="#toolbar"
+       data-search="true"
+       data-show-refresh="true"
+       data-show-toggle="true"
+       data-show-columns="true"
+       data-show-export="true"
+       data-detail-view="true"
+       data-detail-formatter="detailFormatter"
+       data-minimum-count-columns="2"
+       data-show-pagination-switch="true"
+       data-pagination="true"
+       data-id-field="articleId"
+       data-page-list="[10,15,20,30,ALL]"
+       data-show-footer="false"
+       data-side-pagination="server">
+</table>
+
+<div id="con-close-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog" id="viewAndEdit">
+        <div class="modal-content">
+            <form data-name="" role="form" id="viewArticleForm"  onsubmit="return false">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="road_title">编辑数据</h4>
+                </div>
+                <div class="modal-body">
+
+
+
+                    <form class="form-inline" role="form">
+                        <div class="form-group">
+                            <label class="form-label">a1</label>
+                            <input type="hidden" id="dataId">
+                            <input type="text" class="form-control" id="a1" name="a1">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">a2</label>
+                            <input type="text" class="form-control" id="a2" name="a2">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">a3</label>
+                            <input type="text" class="form-control" id="a3" name="a3">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">a4</label>
+                            <input type="text" class="form-control" id="a4" name="a4">
+                        </div>
+
+
+                        <div class="form-group">
+                            <label class="form-label">a5</label>
+                            <input type="text" class="form-control" id="a5" name="a5">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">a6</label>
+                            <input type="text" class="form-control" id="a6" name="a6">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">a7</label>
+                            <input type="text" class="form-control" id="a7" name="a7">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">a8</label>
+                            <input type="text" class="form-control" id="a8" name="a8">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">a9</label>
+                            <input type="text" class="form-control" id="a9" name="a9">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">a10</label>
+                            <input type="text" class="form-control" id="a10" name="a10">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">a11</label>
+                            <input type="text" class="form-control" id="a11" name="a11">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">a12</label>
+                            <input type="text" class="form-control" id="a12" name="a11">
+                        </div> <div class="form-group">
+                        <label class="form-label">quality</label>
+                        <input type="text" class="form-control" id="quality" name="quality">
+                    </div>
+
+
+
+                    </form>
+
+
+                    <div class="modal-footer">
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" id="updateDataBtn">保存
+                            </button>
+                            <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+                            </button>
+
+
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+</body>
+</html>
+<script type="text/javascript" src="../static/js/dataManage.js" th:inline="javascript" ></script>

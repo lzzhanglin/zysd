@@ -248,6 +248,17 @@ public class FileServiceImpl implements FileService {
         return resultList;
     }
 
+    @Override
+    public List<TestData> getDataForEdit(Integer limit, Integer offset) {
+
+        return fileMapper.showData(limit, offset);
+    }
+
+    @Override
+    public TestData getDataById(Long dataId) {
+        return fileMapper.getDataById(dataId);
+    }
+
 
     public static String getFactor(List<TestData> dataList) {
 

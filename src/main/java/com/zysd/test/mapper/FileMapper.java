@@ -2,6 +2,8 @@ package com.zysd.test.mapper;
 
 import com.zysd.test.entity.TestData;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.io.ResolverUtil;
 import org.apache.poi.ss.formula.functions.T;
 
 import java.util.List;
@@ -18,4 +20,11 @@ public interface FileMapper {
     List<TestData> showData(Integer limit, Integer offset);
 
     Integer getTotal();
+
+    TestData getDataById(@Param(value = "dataId") Long dataId);
+
+    Integer deleteDataById(@Param(value = "dataId") Long dataId);
+
+    Integer updateDataById(TestData testData);
+
 }

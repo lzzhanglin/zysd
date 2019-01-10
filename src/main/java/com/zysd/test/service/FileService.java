@@ -18,4 +18,8 @@ public interface FileService {
     public List<TestData> showData(Integer limit, Integer offset);
 
     List<Map<String, Object>> dataAnalysis(List<TestData> dataList);
+
+    List<TestData> getDataForEdit(Integer limit, Integer offset);
+
+    public TestData getDataById(Long dataId);
 }
