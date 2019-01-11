@@ -76,6 +76,7 @@ public class MainController {
 
     @RequestMapping("/showData")
     public String showData(HttpServletRequest request) {
+        logger.info("访问showData一次************");
 
         Integer pageNo = 1;
         Integer pageSize = 10;

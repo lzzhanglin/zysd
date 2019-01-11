@@ -123,6 +123,16 @@
 			<artifactId>bootstrap</artifactId>
 			<version>3.3.7-1</version>
 		</dependency>
+		<!-- https://mvnrepository.com/artifact/net.sourceforge.groboutils/groboutils-core -->
+		<!--<dependency>-->
+			<!--<groupId>net.sourceforge.groboutils</groupId>-->
+			<!--<artifactId>groboutils-core</artifactId>-->
+			<!--<version>5</version>-->
+			<!--<scope>test</scope>-->
+			<!--<systemPath>D:/IdeaProjects/test/src/main/resources/lib/GroboUtils-5-core.jar</systemPath>-->
+		<!--</dependency>-->
+
+
 
 
 
